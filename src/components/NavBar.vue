@@ -15,11 +15,15 @@ import { isDark } from '~/logics'
     <nav class="nav">
       <div class="spacer" />
       <div class="right">
+        <RouterLink to="/" title="Blog">
+          <span class="lt-md:hidden">Home</span>
+          <div i-ri-home-line md:hidden />
+        </RouterLink>
         <RouterLink to="/posts" title="Blog">
           <span class="lt-md:hidden">Blog</span>
           <div i-ri-article-line md:hidden />
         </RouterLink>
-        <RouterLink to="/projects" title="Projects">
+        <!-- <RouterLink to="/projects" title="Projects">
           <span class="lt-md:hidden">Projects</span>
           <div i-ri-lightbulb-line class="md:hidden" />
         </RouterLink>
@@ -35,20 +39,20 @@ import { isDark } from '~/logics'
         <RouterLink to="/demos" title="Demos">
           <span class="lt-md:hidden">Demos</span>
           <div i-ri-screenshot-line class="md:hidden" />
-        </RouterLink>
+        </RouterLink> -->
         <!-- <RouterLink to="/bookmarks" title="Bookmarks">
           <div i-ri-bookmark-line />
         </RouterLink> -->
         <!-- <RouterLink to="/notes" title="Notes">
           <div i-ri-sticky-note-line />
         </RouterLink> -->
-        <RouterLink to="/sponsors-list" title="Sponsors">
+        <!-- <RouterLink to="/sponsors-list" title="Sponsors">
           <div i-ri-heart-line />
-        </RouterLink>
-        <a href="https://twitter.com/antfu7" target="_blank" title="Twitter" class="lt-md:hidden">
+        </RouterLink> -->
+        <a href="https://twitter.com/real_flynncao" target="_blank" title="Twitter" class="lt-md:hidden">
           <feather-twitter />
         </a>
-        <a href="https://github.com/antfu" target="_blank" title="GitHub" class="lt-md:hidden">
+        <a href="https://github.com/flynncao" target="_blank" title="GitHub" class="lt-md:hidden">
           <div i-uil-github-alt />
         </a>
         <a href="/feed.xml" target="_blank" title="RSS" class="lt-md:hidden">

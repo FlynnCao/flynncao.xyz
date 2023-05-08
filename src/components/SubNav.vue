@@ -13,7 +13,7 @@ const route = useRoute()
       <div :i="englishOnly ? 'carbon-checkbox-checked' : 'carbon-checkbox'" />
       English Only
     </button>
-
+    <!--
     <div mb-0 flex="~ gap2 sm:gap3 wrap" text-xl sm:text-3xl>
       <RouterLink to="/posts" class="!border-none !font-400" :class="route.path === '/posts' ? '' : inactiveStyle">
         Blog
@@ -27,6 +27,6 @@ const route = useRoute()
       <RouterLink to="/streams" class="!border-none !font-400" :class="route.path === '/streams' ? '' : inactiveStyle">
         Streams
       </RouterLink>
-    </div>
+    </div> -->
   </div>
 </template>
