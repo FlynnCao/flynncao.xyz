@@ -1,46 +1,36 @@
 <script setup lang='ts'>
 import type { Fn } from '@vueuse/core'
 
-const el = ref<HTMLCanvasElement | null>(null)!
-const ctx = computed(() => el?.value?.getContext('2d'))!
-
 const r180 = Math.PI
 const r90 = Math.PI / 2
 const r15 = Math.PI / 12
 const color = '#88888825'
-const petalColor = '#FFB7C5'
+
+const el = ref<HTMLCanvasElement | null>(null)
 
 const { random } = Math
 const size = reactive(useWindowSize())
 
 const start = ref<Fn>(() => {})
-const init = ref(4)
+const MIN_BRANCH = 30
 const len = ref(6)
 const stopped = ref(false)
 
-interface Flower {
-  dpi: number
-  centerX: number
-  centerY: number
-  radius: number
-  numPetals: number
-}
+function initCanvas(canvas: HTMLCanvasElement, width = 400, height = 400, _dpi?: number) {
+  const ctx = canvas.getContext('2d')!
 
-function drawFlower(ctx) {
-
-}
-
-function initCanvas(width = 400, height = 400, _dpi?: number) {
-  const ctx = el.value!.getContext('2d')!
   const dpr = window.devicePixelRatio || 1
   // @ts-expect-error vendor
   const bsr = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1
+
   const dpi = _dpi || dpr / bsr
-  ctx.style.width = `${width}px`
-  ctx.style.height = `${height}px`
-  ctx.width = dpi * width
-  ctx.height = dpi * height
+
+  canvas.style.width = `${width}px`
+  canvas.style.height = `${height}px`
+  canvas.width = dpi * width
+  canvas.height = dpi * height
   ctx.scale(dpi, dpi)
+
   return { ctx, dpi }
 }
 
@@ -51,17 +41,16 @@ function polar2cart(x = 0, y = 0, r = 0, theta = 0) {
 }
 
 onMounted(async () => {
-  // const canvas = el.value!
-  ctx = initCanvas(size.width, size.height)
-  const { width, height } = el
+  const canvas = el.value!
+  const { ctx } = initCanvas(canvas, size.width, size.height)
+  const { width, height } = canvas
 
   let steps: Fn[] = []
   let prevSteps: Fn[] = []
 
-  let iterations = 0
-
-  const step = (x: number, y: number, rad: number) => {
+  const step = (x: number, y: number, rad: number, counter: { value: number } = { value: 0 }) => {
     const length = random() * len.value
+    counter.value += 1
 
     const [nx, ny] = polar2cart(x, y, length, rad)
 
@@ -73,17 +62,25 @@ onMounted(async () => {
     const rad1 = rad + random() * r15
     const rad2 = rad - random() * r15
 
+    // out of bounds
     if (nx < -100 || nx > size.width + 100 || ny < -100 || ny > size.height + 100)
       return
 
-    if (iterations <= init.value || random() > 0.5)
-      steps.push(() => step(nx, ny, rad1))
-    if (iterations <= init.value || random() > 0.5)
-      steps.push(() => step(nx, ny, rad2))
+    const rate = counter.value <= MIN_BRANCH
+      ? 0.8
+      : 0.5
+
+    // left branch
+    if (random() < rate)
+      steps.push(() => step(nx, ny, rad1, counter))
+
+    // right branch
+    if (random() < rate)
+      steps.push(() => step(nx, ny, rad2, counter))
   }
 
   let lastTime = performance.now()
-  const interval = 1000 / 40
+  const interval = 1000 / 40 // 50fps
 
   let controls: ReturnType<typeof useRafFn>
 
@@ -91,7 +88,6 @@ onMounted(async () => {
     if (performance.now() - lastTime < interval)
       return
 
-    iterations += 1
     prevSteps = steps
     steps = []
     lastTime = performance.now()
@@ -100,23 +96,35 @@ onMounted(async () => {
       controls.pause()
       stopped.value = true
     }
-    prevSteps.forEach(i => i())
+
+    // Execute all the steps from the previous frame
+    prevSteps.forEach((i) => {
+      // 50% chance to keep the step for the next frame, to create a more organic look
+      if (random() < 0.5)
+        steps.push(i)
+      else
+        i()
+    })
   }
 
   controls = useRafFn(frame, { immediate: false })
 
+  /**
+   * 0.2 - 0.8
+   */
+  const randomMiddle = () => random() * 0.6 + 0.2
+
   start.value = () => {
     controls.pause()
-    iterations = 0
     ctx.clearRect(0, 0, width, height)
     ctx.lineWidth = 1
     ctx.strokeStyle = color
     prevSteps = []
     steps = [
-      () => step(random() * size.width, 0, r90),
-      () => step(random() * size.width, size.height, -r90),
-      () => step(0, random() * size.height, 0),
-      () => step(size.width, random() * size.height, r180),
+      () => step(randomMiddle() * size.width, -5, r90),
+      () => step(randomMiddle() * size.width, size.height + 5, -r90),
+      () => step(-5, randomMiddle() * size.height, 0),
+      () => step(size.width + 5, randomMiddle() * size.height, r180),
     ]
     if (size.width < 500)
       steps = steps.slice(0, 2)

@@ -8,17 +8,6 @@ function slug(name: string) {
 
 <template>
   <div class="max-w-300 mx-auto">
-    <div text-center mt-15 mb--5 slide-enter>
-      <RouterLink
-        to="/sponsors-list"
-        mx-auto op50 px3 py2 rounded
-        hover="op100 text-rose bg-rose/10" class="group border-none!"
-      >
-        <div i-carbon-favorite group-hover:i-carbon-favorite-filled />
-        Sponsor to support my work
-      </RouterLink>
-    </div>
-
     <div
       v-for="key, cidx in Object.keys(projects)" :key="key" slide-enter
       :style="{ '--enter-stage': cidx + 1 }"
@@ -28,7 +17,7 @@ function slug(name: string) {
       </h4>
       <div
         class="project-grid py-2 max-w-500 w-max mx-auto"
-        grid="~ cols-1 md:cols-2 lg:cols-3 gap-2"
+        grid="~ cols-1 md:cols-2 lg:cols-3 gap-4"
         :class="projects[key].length === 1 ? 'flex' : ''"
       >
         <a
@@ -60,7 +49,7 @@ function slug(name: string) {
     <div class="prose pb5 mx-auto mt10 text-center">
       <p op75>
         <em>
-          Thanks for getting intersted in my works! If like them or find them useful, consider
+          Thanks for getting interested in my works! If like them or find them useful, consider
           &nbsp;<a
             href="https://github.com/sponsors/antfu"
             target="_blank"
@@ -69,7 +58,10 @@ function slug(name: string) {
         </em>
       </p>
 
-      <a href="https://antfu.me/stars-rank" target="_blank">All projects sort by Stars</a>
+      <SponsorButton />
+      <div block mt-5>
+        <a href="https://antfu.me/stars-rank" target="_blank" op50>All projects sort by Stars</a>
+      </div>
     </div>
   </div>
   <div class="table-of-contents">
@@ -83,10 +75,12 @@ function slug(name: string) {
 
 <style scoped>
 .project-grid a.item {
-  padding: 0.8em 1em;
   background: transparent;
   font-size: 1.1rem;
   width: 350px;
+  max-width: 100%;
+  padding: 0.5rem 0.875rem 0.875rem;
+  border-radius: 6px;
 }
 
 .project-grid a.item:hover {

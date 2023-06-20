@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { isDark } from '~/logics'
 </script>
 
 <template>
@@ -32,9 +31,6 @@ import { isDark } from '~/logics'
         </RouterLink>
         <RouterLink to="/podcasts" class="lt-md:hidden" title="Podcasts">
           Podcasts
-        </RouterLink>
-        <RouterLink to="/streams" class="lt-md:hidden" title="Streams">
-          Streams
         </RouterLink>
         <RouterLink to="/demos" title="Demos">
           <span class="lt-md:hidden">Demos</span>

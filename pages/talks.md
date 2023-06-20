@@ -7,19 +7,13 @@ items:
     date: '2023-10-25'
     inperson: true
     path: 'https://vuefes.jp/2023/'
-  - title: 'DX with Nuxt DevTools - StrasbourgJS / In Person'
-    date: '2023-05-25'
-    inperson: true
-    path: 'https://www.meetup.com/fr-FR/strasbourgjs/events/293274289/'
 ---
 
 <SubNav />
 
 <div slide-enter>
-  <RouterLink to="/giving-talks" op50>
-    <div i-ri:presentation-line />
-    Available for giving talks!
-  </RouterLink>
+  <div i-ri:presentation-line mr-1 />
+  <RouterLink to="/giving-talks" op50>Available for giving talks!</RouterLink>
 </div>
 
 <ListPosts type="talk" :extra="items" />
