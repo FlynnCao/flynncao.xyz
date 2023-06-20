@@ -5,9 +5,10 @@ const r180 = Math.PI
 const r90 = Math.PI / 2
 const r15 = Math.PI / 12
 const color = '#88888825'
-
+const petalColor = '#FFB7C5'
+const hasPistill = false
 const el = ref<HTMLCanvasElement | null>(null)
-
+let testV = false
 const { random } = Math
 const size = reactive(useWindowSize())
 
@@ -16,9 +17,16 @@ const MIN_BRANCH = 30
 const len = ref(6)
 const stopped = ref(false)
 
+interface Flower {
+  dpi: number
+  centerX: number
+  centerY: number
+  radius: number
+  numPetals: number
+}
+
 function initCanvas(canvas: HTMLCanvasElement, width = 400, height = 400, _dpi?: number) {
   const ctx = canvas.getContext('2d')!
-
   const dpr = window.devicePixelRatio || 1
   // @ts-expect-error vendor
   const bsr = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1
@@ -48,6 +56,35 @@ onMounted(async () => {
   let steps: Fn[] = []
   let prevSteps: Fn[] = []
 
+  const drawFlower = (f: Flower) => {
+    ctx.beginPath()
+    // draw petals
+    for (let n = 0; n < f.numPetals; n++) {
+      const theta1 = ((Math.PI * 2) / f.numPetals) * (n + 1)
+      const theta2 = ((Math.PI * 2) / f.numPetals) * (n)
+      const x1 = (f.radius * Math.sin(theta1)) + f.centerX
+      const y1 = (f.radius * Math.cos(theta1)) + f.centerY
+      const x2 = (f.radius * Math.sin(theta2)) + f.centerX
+      const y2 = (f.radius * Math.cos(theta2)) + f.centerY
+
+      ctx.moveTo(f.centerX, f.centerY)
+
+      ctx.bezierCurveTo(x1, y1, x2, y2, f.centerX, f.centerY)
+    }
+
+    ctx.closePath()
+    ctx.fillStyle = petalColor
+    ctx.fill()
+
+    // draw pistil
+    if (hasPistill) {
+      ctx.beginPath()
+      ctx.arc(f.centerX, f.centerY, f.radius / 5, 0, 2 * Math.PI, false)
+      ctx.fillStyle = 'yellow'
+      ctx.fill()
+    }
+  }
+
   const step = (x: number, y: number, rad: number, counter: { value: number } = { value: 0 }) => {
     const length = random() * len.value
     counter.value += 1
@@ -70,13 +107,29 @@ onMounted(async () => {
       ? 0.8
       : 0.5
 
+    let l = false
+    let r = false
     // left branch
-    if (random() < rate)
+    if (random() < rate) {
       steps.push(() => step(nx, ny, rad1, counter))
+      l = true
+    }
 
     // right branch
-    if (random() < rate)
+    if (random() < rate) {
       steps.push(() => step(nx, ny, rad2, counter))
+      r = true
+    }
+
+    if (random() < 0.1 && counter.value > MIN_BRANCH) {
+      const numPetals = Math.floor(Math.random() * 2) + 2
+      steps.push(() => drawFlower({ dpi: 1, centerX: nx, centerY: ny, radius: 10, numPetals }))
+    }
+
+    if (random() < 0.1 && !l && !r && counter.value > MIN_BRANCH) {
+      const numPetals = 5
+      steps.push(() => drawFlower({ dpi: 1, centerX: nx, centerY: ny, radius: 10, numPetals }))
+    }
   }
 
   let lastTime = performance.now()
