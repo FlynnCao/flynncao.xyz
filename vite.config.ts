@@ -16,7 +16,8 @@ import anchor from 'markdown-it-anchor'
 import LinkAttributes from 'markdown-it-link-attributes'
 import UnoCSS from 'unocss/vite'
 import SVG from 'vite-svg-loader'
-import VueMacros from 'unplugin-vue-macros/vite'
+
+// import VueMacros from 'unplugin-vue-macros/vite'
 
 // @ts-expect-error missing types
 import TOC from 'markdown-it-table-of-contents'
@@ -41,18 +42,18 @@ export default defineConfig({
     ],
   },
   plugins: [
-    VueMacros({
-      defineOptions: false,
-      defineModels: false,
-      plugins: {
-        vue: Vue({
-          script: {
-            propsDestructure: true,
-            defineModel: true,
-          },
-        }),
-      },
-    }),
+    // VueMacros({
+    //   defineOptions: false,
+    //   defineModels: false,
+    //   plugins: {
+    //     vue: Vue({
+    //       script: {
+    //         propsDestructure: true,
+    //         defineModel: true,
+    //       },
+    //     }),
+    //   },
+    // }),
 
     UnoCSS(),
 

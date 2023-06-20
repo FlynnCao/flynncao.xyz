@@ -1,8 +1,8 @@
 <script setup lang='ts'>
 import type { Fn } from '@vueuse/core'
 
-const el = $ref<HTMLCanvasElement | null>(null)
-const ctx = $computed(() => el!.getContext('2d'))
+const el = ref<HTMLCanvasElement | null>(null)!
+const ctx = computed(() => el?.value?.getContext('2d'))!
 
 const r180 = Math.PI
 const r90 = Math.PI / 2
@@ -31,20 +31,16 @@ function drawFlower(ctx) {
 }
 
 function initCanvas(width = 400, height = 400, _dpi?: number) {
-  // const ctx = canvas.getContext('2d')!
-
+  const ctx = el.value!.getContext('2d')!
   const dpr = window.devicePixelRatio || 1
   // @ts-expect-error vendor
   const bsr = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1
-
   const dpi = _dpi || dpr / bsr
-
   ctx.style.width = `${width}px`
   ctx.style.height = `${height}px`
   ctx.width = dpi * width
   ctx.height = dpi * height
   ctx.scale(dpi, dpi)
-
   return { ctx, dpi }
 }
 
@@ -56,7 +52,7 @@ function polar2cart(x = 0, y = 0, r = 0, theta = 0) {
 
 onMounted(async () => {
   // const canvas = el.value!
-  const { ctx } = initCanvas(size.width, size.height)
+  ctx = initCanvas(size.width, size.height)
   const { width, height } = el
 
   let steps: Fn[] = []
