@@ -1,3 +1,5 @@
+<script lang="ts" setup></script>
+
 <template>
   <NavBar />
   <main class="px-7 py-10">

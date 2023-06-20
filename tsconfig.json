@@ -11,7 +11,18 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "forceConsistentCasingInFileNames": true,
-    "types": ["vite/client", "vite-plugin-pages/client"],
+    "types": ["vite/client", "vite-plugin-pages/client", "unplugin-vue-macros/macros-global"],
+    "vueCompilerOptions": {
+      "plugins": [
+        "@vue-macros/volar/define-options",
+        "@vue-macros/volar/define-models",
+        "@vue-macros/volar/define-props",
+        "@vue-macros/volar/define-props-refs",
+        "@vue-macros/volar/short-vmodel",
+        "@vue-macros/volar/define-slots",
+        "@vue-macros/volar/export-props"
+      ]
+    },
     "paths": {
       "~/*": ["src/*"]
     }

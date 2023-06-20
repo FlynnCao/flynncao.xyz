@@ -1,12 +1,14 @@
 <script setup lang='ts'>
 import type { Fn } from '@vueuse/core'
 
+const el = $ref<HTMLCanvasElement | null>(null)
+const ctx = $computed(() => el!.getContext('2d'))
+
 const r180 = Math.PI
 const r90 = Math.PI / 2
 const r15 = Math.PI / 12
 const color = '#88888825'
-
-const el = ref<HTMLCanvasElement | null>(null)
+const petalColor = '#FFB7C5'
 
 const { random } = Math
 const size = reactive(useWindowSize())
@@ -16,8 +18,20 @@ const init = ref(4)
 const len = ref(6)
 const stopped = ref(false)
 
-function initCanvas(canvas: HTMLCanvasElement, width = 400, height = 400, _dpi?: number) {
-  const ctx = canvas.getContext('2d')!
+interface Flower {
+  dpi: number
+  centerX: number
+  centerY: number
+  radius: number
+  numPetals: number
+}
+
+function drawFlower(ctx) {
+
+}
+
+function initCanvas(width = 400, height = 400, _dpi?: number) {
+  // const ctx = canvas.getContext('2d')!
 
   const dpr = window.devicePixelRatio || 1
   // @ts-expect-error vendor
@@ -25,10 +39,10 @@ function initCanvas(canvas: HTMLCanvasElement, width = 400, height = 400, _dpi?:
 
   const dpi = _dpi || dpr / bsr
 
-  canvas.style.width = `${width}px`
-  canvas.style.height = `${height}px`
-  canvas.width = dpi * width
-  canvas.height = dpi * height
+  ctx.style.width = `${width}px`
+  ctx.style.height = `${height}px`
+  ctx.width = dpi * width
+  ctx.height = dpi * height
   ctx.scale(dpi, dpi)
 
   return { ctx, dpi }
@@ -41,9 +55,9 @@ function polar2cart(x = 0, y = 0, r = 0, theta = 0) {
 }
 
 onMounted(async () => {
-  const canvas = el.value!
-  const { ctx } = initCanvas(canvas, size.width, size.height)
-  const { width, height } = canvas
+  // const canvas = el.value!
+  const { ctx } = initCanvas(size.width, size.height)
+  const { width, height } = el
 
   let steps: Fn[] = []
   let prevSteps: Fn[] = []
