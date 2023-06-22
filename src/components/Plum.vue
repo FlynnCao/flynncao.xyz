@@ -1,24 +1,59 @@
 <script setup lang='ts'>
 import type { Fn } from '@vueuse/core'
 
+const isDark = useDark()
 const r180 = Math.PI
 const r90 = Math.PI / 2
 const r15 = Math.PI / 12
 const color = '#88888825'
-
+const hasPistill = false
 const el = ref<HTMLCanvasElement | null>(null)
-
 const { random } = Math
 const size = reactive(useWindowSize())
 
+interface PetalTheme {
+  color: string
+  darkModeColor: string
+  fullness: number
+  name: string
+}
+const petalThemes: PetalTheme[] = [
+  {
+    color: '#357807',
+    fullness: 2,
+    name: 'banboo',
+    darkModeColor: '#357807',
+  },
+  {
+    color: '#FFB7C5',
+    darkModeColor: '#b8959b',
+    fullness: 0,
+    name: 'sakura',
+  },
+  {
+    color: '#c83349',
+    fullness: 0.3,
+    name: 'plum',
+    darkModeColor: '#357807',
+
+  },
+]
+const defaultPetalTheme = petalThemes[1]
 const start = ref<Fn>(() => {})
 const MIN_BRANCH = 30
 const len = ref(6)
 const stopped = ref(false)
 
+interface Flower {
+  dpi: number
+  centerX: number
+  centerY: number
+  radius: number
+  numPetals: number
+}
+
 function initCanvas(canvas: HTMLCanvasElement, width = 400, height = 400, _dpi?: number) {
   const ctx = canvas.getContext('2d')!
-
   const dpr = window.devicePixelRatio || 1
   // @ts-expect-error vendor
   const bsr = ctx.webkitBackingStorePixelRatio || ctx.mozBackingStorePixelRatio || ctx.msBackingStorePixelRatio || ctx.oBackingStorePixelRatio || ctx.backingStorePixelRatio || 1
@@ -48,6 +83,37 @@ onMounted(async () => {
   let steps: Fn[] = []
   let prevSteps: Fn[] = []
 
+  const drawFlower = (f: Flower) => {
+    ctx.beginPath()
+    // draw petals
+    for (let n = 0; n < f.numPetals; n++) {
+      const theta1 = ((Math.PI * 2) / f.numPetals) * (n + 1)
+      const theta2 = ((Math.PI * 2) / f.numPetals) * (n)
+      const controlOffset = f.radius * defaultPetalTheme.fullness // Adjust this value to control the fullness of the petal
+      const x1 = (f.radius * Math.cos(theta1)) + f.centerX
+      const y1 = (f.radius * Math.sin(theta1)) + f.centerY
+      const x2 = (f.radius * Math.cos(theta2)) + f.centerX
+      const y2 = (f.radius * Math.sin(theta2)) + f.centerY
+      const cx = (controlOffset * Math.sin(theta1 - Math.PI / 2)) + f.centerX
+      const cy = (controlOffset * Math.cos(theta1 - Math.PI / 2)) + f.centerY
+      ctx.moveTo(f.centerX, f.centerY)
+
+      ctx.bezierCurveTo(x1, y1, x2, y2, cx, cy)
+    }
+
+    ctx.closePath()
+    ctx.fillStyle = isDark.value ? defaultPetalTheme.darkModeColor : defaultPetalTheme.color
+    ctx.fill()
+
+    // draw pistil
+    if (hasPistill) {
+      ctx.beginPath()
+      ctx.arc(f.centerX, f.centerY, f.radius / 5, 0, 2 * Math.PI, false)
+      ctx.fillStyle = 'yellow'
+      ctx.fill()
+    }
+  }
+
   const step = (x: number, y: number, rad: number, counter: { value: number } = { value: 0 }) => {
     const length = random() * len.value
     counter.value += 1
@@ -70,13 +136,29 @@ onMounted(async () => {
       ? 0.8
       : 0.5
 
+    let l = false
+    let r = false
     // left branch
-    if (random() < rate)
+    if (random() < rate) {
       steps.push(() => step(nx, ny, rad1, counter))
+      l = true
+    }
 
     // right branch
-    if (random() < rate)
+    if (random() < rate) {
       steps.push(() => step(nx, ny, rad2, counter))
+      r = true
+    }
+
+    if (random() < 0.1 && counter.value > MIN_BRANCH) {
+      const numPetals = Math.floor(Math.random() * 2) + 2
+      steps.push(() => drawFlower({ dpi: 1, centerX: nx, centerY: ny, radius: 10, numPetals }))
+    }
+
+    if (random() < 0.1 && !l && !r && counter.value > MIN_BRANCH) {
+      const numPetals = 5
+      steps.push(() => drawFlower({ dpi: 1, centerX: nx, centerY: ny, radius: 10, numPetals }))
+    }
   }
 
   let lastTime = performance.now()
@@ -133,6 +215,18 @@ onMounted(async () => {
   }
 
   start.value()
+
+  const reRender = () => {
+    stop.value = true
+    steps.length = 0
+	  prevSteps.length = 0
+    ctx.clearRect(0, 0, size.width, size.height)
+    start.value()
+  }
+
+  watch(isDark, () => {
+    reRender()
+  })
 })
 const mask = computed(() => 'radial-gradient(circle, transparent, black);')
 </script>
