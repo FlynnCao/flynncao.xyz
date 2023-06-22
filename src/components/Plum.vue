@@ -1,17 +1,44 @@
 <script setup lang='ts'>
 import type { Fn } from '@vueuse/core'
 
+const isDark = useDark()
 const r180 = Math.PI
 const r90 = Math.PI / 2
 const r15 = Math.PI / 12
 const color = '#88888825'
-const petalColor = '#FFB7C5'
 const hasPistill = false
 const el = ref<HTMLCanvasElement | null>(null)
-let testV = false
 const { random } = Math
 const size = reactive(useWindowSize())
 
+interface PetalTheme {
+  color: string
+  darkModeColor: string
+  fullness: number
+  name: string
+}
+const petalThemes: PetalTheme[] = [
+  {
+    color: '#357807',
+    fullness: 2,
+    name: 'banboo',
+    darkModeColor: '#357807',
+  },
+  {
+    color: '#FFB7C5',
+    darkModeColor: '#b8959b',
+    fullness: 0,
+    name: 'sakura',
+  },
+  {
+    color: '#c83349',
+    fullness: 0.3,
+    name: 'plum',
+    darkModeColor: '#357807',
+
+  },
+]
+const defaultPetalTheme = petalThemes[1]
 const start = ref<Fn>(() => {})
 const MIN_BRANCH = 30
 const len = ref(6)
@@ -62,18 +89,20 @@ onMounted(async () => {
     for (let n = 0; n < f.numPetals; n++) {
       const theta1 = ((Math.PI * 2) / f.numPetals) * (n + 1)
       const theta2 = ((Math.PI * 2) / f.numPetals) * (n)
-      const x1 = (f.radius * Math.sin(theta1)) + f.centerX
-      const y1 = (f.radius * Math.cos(theta1)) + f.centerY
-      const x2 = (f.radius * Math.sin(theta2)) + f.centerX
-      const y2 = (f.radius * Math.cos(theta2)) + f.centerY
-
+      const controlOffset = f.radius * defaultPetalTheme.fullness // Adjust this value to control the fullness of the petal
+      const x1 = (f.radius * Math.cos(theta1)) + f.centerX
+      const y1 = (f.radius * Math.sin(theta1)) + f.centerY
+      const x2 = (f.radius * Math.cos(theta2)) + f.centerX
+      const y2 = (f.radius * Math.sin(theta2)) + f.centerY
+      const cx = (controlOffset * Math.sin(theta1 - Math.PI / 2)) + f.centerX
+      const cy = (controlOffset * Math.cos(theta1 - Math.PI / 2)) + f.centerY
       ctx.moveTo(f.centerX, f.centerY)
 
-      ctx.bezierCurveTo(x1, y1, x2, y2, f.centerX, f.centerY)
+      ctx.bezierCurveTo(x1, y1, x2, y2, cx, cy)
     }
 
     ctx.closePath()
-    ctx.fillStyle = petalColor
+    ctx.fillStyle = isDark.value ? defaultPetalTheme.darkModeColor : defaultPetalTheme.color
     ctx.fill()
 
     // draw pistil
@@ -186,6 +215,18 @@ onMounted(async () => {
   }
 
   start.value()
+
+  const reRender = () => {
+    stop.value = true
+    steps.length = 0
+	  prevSteps.length = 0
+    ctx.clearRect(0, 0, size.width, size.height)
+    start.value()
+  }
+
+  watch(isDark, () => {
+    reRender()
+  })
 })
 const mask = computed(() => 'radial-gradient(circle, transparent, black);')
 </script>
