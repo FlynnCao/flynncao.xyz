@@ -10,4 +10,6 @@ export interface Post {
   radio?: boolean
   video?: boolean
   inperson?: boolean
+  tags?: string[]
+  category?: string
 }

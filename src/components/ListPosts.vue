@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { englishOnly, formatDate } from '~/logics'
+import { categoryName, englishOnly, formatDate } from '~/logics'
 import type { Post } from '~/types'
 
 const props = defineProps<{
@@ -21,13 +21,17 @@ const routes: Post[] = router.getRoutes()
     duration: i.meta.frontmatter.duration,
     recording: i.meta.frontmatter.recording,
     upcoming: i.meta.frontmatter.upcoming,
+    tag: i.meta.frontmatter.tag,
+    category: i.meta.frontmatter.category,
   }))
 
 const posts = computed(() =>
   [...(props.posts || routes), ...props.extra || []]
     .sort((a, b) => +new Date(b.date) - +new Date(a.date))
-    .filter(i => !englishOnly.value || i.lang !== 'zh'),
-)
+    .filter(i => !englishOnly.value || i.lang !== 'zh')
+    .filter((i) => {
+      return categoryName.value === 'All' || i.category === categoryName.value.toLocaleLowerCase()
+    }))
 
 const getYear = (a: Date | string | number) => new Date(a).getFullYear()
 const isFuture = (a?: Date | string | number) => a && new Date(a) > new Date()

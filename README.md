@@ -1,6 +1,6 @@
 **[antfu.me](https://antfu.me)**
 
-my personal website powered by [Vite](https://vitejs.dev/)
+my personal website forked from [Antfu's Blog](https://github.com/antfu/antfu.me)
 
 <br>
 

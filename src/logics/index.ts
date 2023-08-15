@@ -2,15 +2,15 @@ import dayjs from 'dayjs'
 
 export const isDark = useDark()
 export const englishOnly = useStorage('antfu-english-only', false)
-
+export const CSOnly = useStorage('antfu-cs-only', false)
+export const categoryName = useStorage('antfu-category-name', 'All')
 /**
  * Credit to [@hooray](https://github.com/hooray)
  * @see https://github.com/vuejs/vitepress/pull/2347
  */
 export function toggleDark(event: MouseEvent) {
   // @ts-expect-error experimental API
-  const isAppearanceTransition = document.startViewTransition
-    && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const isAppearanceTransition = document.startViewTransition && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   if (!isAppearanceTransition) {
     isDark.value = !isDark.value
@@ -30,9 +30,7 @@ export function toggleDark(event: MouseEvent) {
   })
   transition.ready
     .then(() => {
-      const clipPath = [
-        `circle(0px at ${x}px ${y}px)`,
-        `circle(${endRadius}px at ${x}px ${y}px)`,
+      const clipPath = [`circle(0px at ${x}px ${y}px)`, `circle(${endRadius}px at ${x}px ${y}px)`,
       ]
       document.documentElement.animate(
         {
