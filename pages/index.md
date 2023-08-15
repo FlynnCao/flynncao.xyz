@@ -1,11 +1,11 @@
 ---
-title: 彼方 Maji-May
+title: 彼方(Maji-May)
 description: Flynn Cao's Portfolio
 image: 
 plum: true
 ---
 
-Hey there! I'm **Flynn Cao**, a student pursuing my MSE degree and also working as a software developer.
+Hallo! I'm **Flynn Cao**, a student pursuing my MSE degree in UM ~~and also working as a software developer~~.
 
 If you're interested in checking out my open-source contributions and following along with my learning journey, you can find me on GitHub at https://github.com/flynncao.
 
@@ -29,4 +29,4 @@ Find me on
 
 ---
 
-中文博客：https://flynncao.xlog.app/
+另外的博客：https://flynncao.xlog.app/
