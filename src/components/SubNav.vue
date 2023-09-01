@@ -6,6 +6,14 @@ const inactiveStyle = 'opacity-20 hover:opacity-50 font-400'
 const activeStyle = 'opacity-100 !font-600'
 
 const route = useRoute()
+const options: string[] = [
+  'All',
+  'Code',
+  'Productivity',
+  'Computer Science',
+  'Linguistics',
+  'Personal',
+]
 </script>
 
 <template>
@@ -16,11 +24,9 @@ const route = useRoute()
         English Only
       </button>
       <select id="grid-state" v-model="categoryName" class="block appearance-none w-full border dark:border-gray-700 dark:text-gray-200 border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white dark:focus:bg-black focus:border-gray-500 dark:bg-black">
-        <option>All</option>
-        <option>Code</option>
-        <option>Computer Science</option>
-        <option>Linguistics</option>
-        <option>Productivity</option>
+        <option v-for="item in options" :key="item" :value="item">
+          {{ item }}
+        </option>
       </select>
     </div>
 

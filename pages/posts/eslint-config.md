@@ -1,5 +1,5 @@
 ---
-title: Customise your ESLint config
+title: How to customise your own ESLint config for any projects?
 date: 2023-07-18T05:00:00.000+00:00
 hide: false
 lang: en
