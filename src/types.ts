@@ -12,4 +12,5 @@ export interface Post {
   inperson?: boolean
   tags?: string[]
   category?: string
+  hide?: boolean
 }

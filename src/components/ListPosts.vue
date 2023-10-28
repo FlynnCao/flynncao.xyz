@@ -23,11 +23,13 @@ const routes: Post[] = router.getRoutes()
     upcoming: i.meta.frontmatter.upcoming,
     tag: i.meta.frontmatter.tag,
     category: i.meta.frontmatter.category,
+    hide: i.meta.frontmatter.hide,
   }))
 
 const posts = computed(() =>
   [...(props.posts || routes), ...props.extra || []]
     .sort((a, b) => +new Date(b.date) - +new Date(a.date))
+    .filter(i => !i.hide)
     .filter(i => !englishOnly.value || i.lang !== 'zh')
     .filter((i) => {
       return categoryName.value === 'All' || i.category === categoryName.value.toLocaleLowerCase()

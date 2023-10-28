@@ -23,15 +23,16 @@ Find me on:
   <a href="https://github.com/FlynnCao" target="_blank"><span op75 i-simple-icons-github /> GitHub</a>
   <a href="https://www.twitter.com/true_flynncao" target="_blank"><span op75 i-simple-icons-twitter /> Twitter</a>
 	<a href="https://t.me/FlynnCao" target="_blank"><span op75 i-simple-icons-telegram /> Telegram Chat</a>
-  <a href="https://discord.com/users/flynncao/" target="_blank"><span op75 i-simple-icons-discord /> Discord Chat</a>
-  <a href="https://www.youtube.com/@majimayofficial" target="_blank"><span op75 i-simple-icons-youtube /> YouTube</a>
-	<a href="https://steamcommunity.com/id/flynncao/"><span op75 i-simple-icons-steam></span>Steam</a>
-	  <a href="https://anilist.co/user/flynncao/" target="_blank"><span op75 i-simple-icons-anilist /> Anilist</a>
+  <!-- <a href="https://discord.com/users/flynncao/" target="_blank"><span op75 i-simple-icons-discord /> Discord Chat</a> -->
+  <!-- <a href="https://www.youtube.com/@majimayofficial" target="_blank"><span op75 i-simple-icons-youtube /> YouTube</a> -->
+	<!-- <a href="https://steamcommunity.com/id/flynncao/"><span op75 i-simple-icons-steam></span>Steam</a> -->
+	  <!-- <a href="https://anilist.co/user/flynncao/" target="_blank"><span op75 i-simple-icons-anilist /> Anilist</a> -->
 	<a href="https://www.goodreads.com/user/show/165341751-cornfieldchase" target="_blank"><span op75 i-la:goodreads /> Goodreads</a>
-	<a href="https://open.spotify.com/user/31yq55jcmnkkkuhe4irsa7kphjoy"><span op75 i-simple-icons-spotify></span>Spotify</a></p>
+	<!-- <a href="https://open.spotify.com/user/31yq55jcmnkkkuhe4irsa7kphjoy"><span op75 i-simple-icons-spotify></span>Spotify</a>-->
+	</p> 
 <!-- If you enjoy my works, consider sponsoring me on [<span i-carbon-favorite /> GitHub Sponsor](https://github.com/sponsors/antfu) to keep them sustainable. -->
 
 
 ---
 
-曾经用过的博客：https://flynncao.xlog.app/
+历史博客：https://flynncao.xlog.app/
