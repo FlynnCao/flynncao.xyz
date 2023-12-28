@@ -45,9 +45,9 @@
         <!-- <RouterLink to="/sponsors-list" title="Sponsors">
           <div i-ri-heart-line />
         </RouterLink> -->
-        <a href="https://twitter.com/real_flynncao" target="_blank" title="Twitter" class="lt-md:hidden">
+        <!-- <a href="https://twitter.com/real_flynncao" target="_blank" title="Twitter" class="lt-md:hidden">
           <feather-twitter />
-        </a>
+        </a> -->
         <a href="https://github.com/flynncao" target="_blank" title="GitHub" class="lt-md:hidden">
           <div i-uil-github-alt />
         </a>
