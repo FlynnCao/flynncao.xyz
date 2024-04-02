@@ -1,5 +1,5 @@
 :root {
-  --c-bg: #fff;
+  --c-bg: #fffefd;
   --c-scrollbar: #eee;
   --c-scrollbar-hover: #bbb;
 }
@@ -11,7 +11,7 @@ html {
 }
 
 html.dark {
-  --c-bg: #050505;
+  --c-bg: #31363F;
   --c-scrollbar: #111;
   --c-scrollbar-hover: #222;
 }

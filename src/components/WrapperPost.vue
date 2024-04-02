@@ -66,9 +66,9 @@ onMounted(() => {
 </script>
 
 <template>
-  <ClientOnly v-if="frontmatter.plum">
+  <!-- <ClientOnly v-if="frontmatter.plum">
     <Plum />
-  </ClientOnly>
+  </ClientOnly> -->
   <div v-if="frontmatter.display ?? frontmatter.title" class="prose m-auto mb-8" :class="frontmatter.wrapperClass">
     <h1 class="mb-0 slide-enter">
       {{ frontmatter.display ?? frontmatter.title }}
