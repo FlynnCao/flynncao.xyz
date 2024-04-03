@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 
 export const isDark = useDark()
 export const englishOnly = useStorage('antfu-english-only', false)
+export const techOnly = useStorage('antfu-tech-only', false)
 export const CSOnly = useStorage('antfu-cs-only', false)
 export const categoryName = useStorage('antfu-category-name', 'All')
 /**
