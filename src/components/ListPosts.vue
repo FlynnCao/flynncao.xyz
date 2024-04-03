@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { categoryName, englishOnly, formatDate } from '~/logics'
+import { categoryName, englishOnly, formatDate, techOnly } from '~/logics'
 import type { Post } from '~/types'
 
 const props = defineProps<{
@@ -9,6 +9,7 @@ const props = defineProps<{
   extra?: Post[]
 }>()
 
+const techRelatedCatagories = ['all', 'code', 'productivity', 'computer Science']
 const router = useRouter()
 const routes: Post[] = router.getRoutes()
   .filter(i => i.path.startsWith('/posts') && i.meta.frontmatter.date)
@@ -31,6 +32,7 @@ const posts = computed(() =>
     .sort((a, b) => +new Date(b.date) - +new Date(a.date))
     .filter(i => !i.hide)
     .filter(i => !englishOnly.value || i.lang !== 'zh')
+    .filter(i => !techOnly.value || (i.category && techRelatedCatagories.includes(i.category)))
     .filter((i) => {
       return categoryName.value === 'All' || i.category === categoryName.value.toLocaleLowerCase()
     }))
